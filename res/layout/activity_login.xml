@@ -11,29 +11,43 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="se.kth.anderssonljung.twittbook.LoginActivity" >
 
-    <EditText
-        android:id="@+id/EditTextUsername"
+    <ScrollView
+        android:id="@+id/scrollview3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Username" />
+        android:layout_height="wrap_content" >
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" >
+        <LinearLayout
+            android:id="@+id/linvertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+            <EditText
+                android:id="@+id/EditTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Username" />
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onLoginClick"
-        android:text="Login" />
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onLoginClick"
+                android:text="Login" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

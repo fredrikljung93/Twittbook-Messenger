@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
@@ -39,6 +40,10 @@ public class LoginActivity extends Activity {
 	}
 
 	public void onLoginClick(View view) {
+		if (username.getText().toString().isEmpty()
+				|| password.getText().toString().isEmpty()) {
+			return;
+		}
 		LoginTask task = new LoginTask(username.getText().toString(), password
 				.getText().toString());
 		task.execute();
@@ -63,7 +68,11 @@ public class LoginActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class LoginTask extends AsyncTask<Void, Void, String> {
+	public enum resultCode {
+		SUCCESS, FILENOTFOUND, NETWORKERROR, ERROR
+	}
+
+	private class LoginTask extends AsyncTask<Void, Void, resultCode> {
 		String username;
 		String password;
 		User user;
@@ -74,7 +83,7 @@ public class LoginActivity extends Activity {
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected resultCode doInBackground(Void... params) {
 			String jsonString = null;
 			BufferedReader in = null;
 			try {
@@ -86,12 +95,11 @@ public class LoginActivity extends Activity {
 				jsonString = in.readLine();
 				in.close();
 			} catch (MalformedURLException ex) {
-				return "error1";
+				return resultCode.ERROR;
 			} catch (FileNotFoundException ex) { // Wrong credentials
-				return "error2";
-			}
-			catch (IOException ex) { // Network problems
-				return "error3";
+				return resultCode.FILENOTFOUND;
+			} catch (IOException ex) { // Network problems
+				return resultCode.NETWORKERROR;
 			} finally {
 				if (in != null) {
 					try {
@@ -106,19 +114,25 @@ public class LoginActivity extends Activity {
 			Gson gson = new Gson();
 			user = gson.fromJson(jsonString, User.class);
 
-			return "success";
+			return resultCode.SUCCESS;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			if (result.equalsIgnoreCase("success")) {
-				if (user != null) {
-					Log.d("LOGIN", "Logged in as " + user.getUsername());
-					Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-					startActivity(intent);
-				} else {
-					Log.d("LOGIN", "code succes, but no user");
-				}
+		protected void onPostExecute(resultCode result) {
+			if (result == resultCode.SUCCESS) {
+				Log.d("LOGIN", "Logged in as " + user.getUsername());
+				Intent intent = new Intent(LoginActivity.this,
+						MenuActivity.class);
+				startActivity(intent);
+			} else if (result == resultCode.FILENOTFOUND) {
+				Toast.makeText(getApplicationContext(),
+						"Invalid username or password", Toast.LENGTH_SHORT)
+						.show();
+
+			} else if (result == resultCode.NETWORKERROR) {
+				Toast.makeText(getApplicationContext(), "Network error",
+						Toast.LENGTH_SHORT).show();
+
 			} else {
 				Log.d("LOGIN", "Login failed, code " + result);
 			}
