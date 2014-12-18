@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="se.kth.anderssonljung.twittbook.MenuActivity" >
+
+    <Button
+        android:id="@+id/buttonNewMessage"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:onClick="onNewMessageClick"
+        android:text="New message" />
+
+    <Button
+        android:id="@+id/buttonInbox"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:onClick="onInboxClick"
+        android:text="Inbox" />
+
+    <Button
+        android:id="@+id/buttonDraft"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:onClick="onDraftClick"
+        android:text="Draft" />
+
+    <Button
+        android:id="@+id/buttonOutbox"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:onClick="onOutboxClick"
+        android:text="Outbox" />
+
+</LinearLayout>

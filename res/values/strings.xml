@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Twittbook</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_user_list">Users</string>
+    <string name="title_activity_conversation">ConversationActivity</string>
+    <string name="title_activity_menu">Menu</string>
+    <string name="title_activity_inbox">InboxActivity</string>
+    <string name="title_activity_display_message">DisplayMessageActivity</string>
+
+</resources>
