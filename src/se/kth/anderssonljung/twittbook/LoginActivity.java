@@ -1,7 +1,6 @@
 package se.kth.anderssonljung.twittbook;
 
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,6 +25,7 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
+	GlobalState global;
 	Button button;
 	EditText username;
 	EditText password;
@@ -37,6 +37,7 @@ public class LoginActivity extends Activity {
 		button = (Button) findViewById(R.id.loginButton);
 		username = (EditText) findViewById(R.id.EditTextUsername);
 		password = (EditText) findViewById(R.id.editTextPassword);
+		global=(GlobalState) getApplication();
 	}
 
 	public void onLoginClick(View view) {
@@ -121,6 +122,9 @@ public class LoginActivity extends Activity {
 		protected void onPostExecute(resultCode result) {
 			if (result == resultCode.SUCCESS) {
 				Log.d("LOGIN", "Logged in as " + user.getUsername());
+				if(global.getDb().getUser(user.getId())==null){
+					global.getDb().addUser(user); // Add user to local db if first login
+				}
 				Intent intent = new Intent(LoginActivity.this,
 						MenuActivity.class);
 				startActivity(intent);
