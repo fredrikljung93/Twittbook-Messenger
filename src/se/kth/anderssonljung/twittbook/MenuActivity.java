@@ -1,18 +1,24 @@
 package se.kth.anderssonljung.twittbook;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 public class MenuActivity extends Activity {
+	GlobalState global;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
+		global = (GlobalState) getApplication();
 	}
 
 	public void onInboxClick(View view) {
@@ -49,5 +55,35 @@ public class MenuActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onBackPressed() {
+		logout();
+	}
+
+	private void logout() {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Do you want to log out?");
+		builder.setTitle("Log out?");
+		builder.setCancelable(true);
+		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				SharedPreferences prefs = getSharedPreferences(
+						"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
+				prefs.edit().remove("userid").apply();
+				global.setUser(null);
+				finish();
+			}
+		});
+		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+
 	}
 }

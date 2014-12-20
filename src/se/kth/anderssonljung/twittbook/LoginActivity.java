@@ -12,7 +12,9 @@ import com.google.gson.Gson;
 import se.kth.anderssonljung.twittbook.R;
 import se.kth.anderssonljung.twittbook.entities.User;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,25 +29,35 @@ public class LoginActivity extends Activity {
 
 	GlobalState global;
 	Button button;
-	EditText username;
-	EditText password;
+	EditText usernameEdit;
+	EditText passwordEdit;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		global = (GlobalState) getApplication();
+		SharedPreferences prefs = getSharedPreferences(
+				"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
+		int userid = prefs.getInt("userid", -1);
+		Log.d("login oncreate", "userid=" + userid);
+		if (userid != -1) { // If logged in previously
+			global.setUser(global.getDb().getUser(userid));
+			Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+			startActivity(intent);
+		}
+
 		setContentView(R.layout.activity_login);
 		button = (Button) findViewById(R.id.loginButton);
-		username = (EditText) findViewById(R.id.EditTextUsername);
-		password = (EditText) findViewById(R.id.editTextPassword);
-		global=(GlobalState) getApplication();
+		usernameEdit = (EditText) findViewById(R.id.EditTextUsername);
+		passwordEdit = (EditText) findViewById(R.id.editTextPassword);
 	}
 
 	public void onLoginClick(View view) {
-		if (username.getText().toString().isEmpty()
-				|| password.getText().toString().isEmpty()) {
+		if (usernameEdit.getText().toString().isEmpty()
+				|| passwordEdit.getText().toString().isEmpty()) {
 			return;
 		}
-		LoginTask task = new LoginTask(username.getText().toString(), password
+		LoginTask task = new LoginTask(usernameEdit.getText().toString(), passwordEdit
 				.getText().toString());
 		task.execute();
 	}
@@ -74,13 +86,13 @@ public class LoginActivity extends Activity {
 	}
 
 	private class LoginTask extends AsyncTask<Void, Void, resultCode> {
-		String username;
-		String password;
+		String usernameString;
+		String passwordString;
 		User user;
 
 		public LoginTask(String username, String password) {
-			this.password = password;
-			this.username = username;
+			this.passwordString = password;
+			this.usernameString = username;
 		}
 
 		@Override
@@ -90,7 +102,7 @@ public class LoginActivity extends Activity {
 			try {
 				URL url = new URL(
 						"http://a.fredrikljung.com:8080/Twittbook/webresources/rest/login?username="
-								+ username + "&" + "password=" + password);
+								+ usernameString + "&" + "password=" + passwordString);
 				in = new BufferedReader(new InputStreamReader(url.openStream()));
 
 				jsonString = in.readLine();
@@ -121,13 +133,17 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onPostExecute(resultCode result) {
 			if (result == resultCode.SUCCESS) {
+				usernameEdit.setText("");
+				passwordEdit.setText("");
 				Log.d("LOGIN", "Logged in as " + user.getUsername());
-				if(global.getDb().getUser(user.getId())==null){
-					global.getDb().addUser(user); // Add user to local db if first login
-				}
+				global.getDb().addUser(user);
 				Intent intent = new Intent(LoginActivity.this,
 						MenuActivity.class);
 				startActivity(intent);
+				SharedPreferences prefs = getSharedPreferences(
+						"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
+				prefs.edit().putInt("userid", user.getId()).apply();
+
 			} else if (result == resultCode.FILENOTFOUND) {
 				Toast.makeText(getApplicationContext(),
 						"Invalid username or password", Toast.LENGTH_SHORT)
