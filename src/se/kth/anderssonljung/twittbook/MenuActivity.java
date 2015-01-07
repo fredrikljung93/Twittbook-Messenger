@@ -38,7 +38,8 @@ public class MenuActivity extends Activity {
 	}
 
 	public void onNewMessageClick(View view) {
-
+		Intent intent = new Intent(MenuActivity.this, NewMessageActivity.class);
+		startActivity(intent);
 	}
 
 	public void onOutboxClick(View view) {
