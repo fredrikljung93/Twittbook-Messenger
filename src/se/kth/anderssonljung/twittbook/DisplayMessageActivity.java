@@ -12,22 +12,21 @@ public class DisplayMessageActivity extends Activity {
 	TextView from;
 	TextView subject;
 	TextView messagebody;
+	GlobalState global;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String s = "";
-		for (int i = 1; i < 50; i++) {
-			s += "Ett långt jävla meddelande " + i + "\n";
-		}
-		Message message = new Message(1337, 1, 2, s, "En rubrik");
+		global = (GlobalState) getApplication();
+		int messageid = getIntent().getExtras().getInt("messageid");
+		message = global.getDb().getMessage(messageid);
 		setContentView(R.layout.activity_display_message);
 
 		from = (TextView) findViewById(R.id.textViewFrom);
 		subject = (TextView) findViewById(R.id.TextViewSubject);
 		messagebody = (TextView) findViewById(R.id.textViewMessageBody);
 
-		from.setText(message.getSender()+"");
+		from.setText(message.getSender() + "");
 		subject.setText(message.getSubject());
 		messagebody.setText(message.getMessage());
 	}

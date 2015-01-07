@@ -38,10 +38,10 @@ public class LoginActivity extends Activity {
 		global = (GlobalState) getApplication();
 		SharedPreferences prefs = getSharedPreferences(
 				"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
-		int userid = prefs.getInt("userid", -1);
-		Log.d("login oncreate", "userid=" + userid);
-		if (userid != -1) { // If logged in previously
-			global.setUser(global.getDb().getUser(userid));
+		String username = prefs.getString("username", null);
+		Log.d("login oncreate", "username=" + username);
+		if (username != null) { // If logged in previously
+			global.setUser(global.getDb().getUser(username));
 			Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
 			startActivity(intent);
 		}
@@ -57,8 +57,8 @@ public class LoginActivity extends Activity {
 				|| passwordEdit.getText().toString().isEmpty()) {
 			return;
 		}
-		LoginTask task = new LoginTask(usernameEdit.getText().toString(), passwordEdit
-				.getText().toString());
+		LoginTask task = new LoginTask(usernameEdit.getText().toString(),
+				passwordEdit.getText().toString());
 		task.execute();
 	}
 
@@ -81,11 +81,7 @@ public class LoginActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public enum resultCode {
-		SUCCESS, FILENOTFOUND, NETWORKERROR, ERROR
-	}
-
-	private class LoginTask extends AsyncTask<Void, Void, resultCode> {
+	private class LoginTask extends AsyncTask<Void, Void, ResultCode> {
 		String usernameString;
 		String passwordString;
 		User user;
@@ -96,23 +92,24 @@ public class LoginActivity extends Activity {
 		}
 
 		@Override
-		protected resultCode doInBackground(Void... params) {
+		protected ResultCode doInBackground(Void... params) {
 			String jsonString = null;
 			BufferedReader in = null;
 			try {
 				URL url = new URL(
 						"http://a.fredrikljung.com:8080/Twittbook/webresources/rest/login?username="
-								+ usernameString + "&" + "password=" + passwordString);
+								+ usernameString + "&" + "password="
+								+ passwordString);
 				in = new BufferedReader(new InputStreamReader(url.openStream()));
 
 				jsonString = in.readLine();
 				in.close();
 			} catch (MalformedURLException ex) {
-				return resultCode.ERROR;
+				return ResultCode.ERROR;
 			} catch (FileNotFoundException ex) { // Wrong credentials
-				return resultCode.FILENOTFOUND;
+				return ResultCode.FILENOTFOUND;
 			} catch (IOException ex) { // Network problems
-				return resultCode.NETWORKERROR;
+				return ResultCode.NETWORKERROR;
 			} finally {
 				if (in != null) {
 					try {
@@ -127,12 +124,12 @@ public class LoginActivity extends Activity {
 			Gson gson = new Gson();
 			user = gson.fromJson(jsonString, User.class);
 
-			return resultCode.SUCCESS;
+			return ResultCode.SUCCESS;
 		}
 
 		@Override
-		protected void onPostExecute(resultCode result) {
-			if (result == resultCode.SUCCESS) {
+		protected void onPostExecute(ResultCode result) {
+			if (result == ResultCode.SUCCESS) {
 				usernameEdit.setText("");
 				passwordEdit.setText("");
 				Log.d("LOGIN", "Logged in as " + user.getUsername());
@@ -142,14 +139,14 @@ public class LoginActivity extends Activity {
 				startActivity(intent);
 				SharedPreferences prefs = getSharedPreferences(
 						"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
-				prefs.edit().putInt("userid", user.getId()).apply();
+				prefs.edit().putString("username", user.getUsername()).apply();
 
-			} else if (result == resultCode.FILENOTFOUND) {
+			} else if (result == ResultCode.FILENOTFOUND) {
 				Toast.makeText(getApplicationContext(),
 						"Invalid username or password", Toast.LENGTH_SHORT)
 						.show();
 
-			} else if (result == resultCode.NETWORKERROR) {
+			} else if (result == ResultCode.NETWORKERROR) {
 				Toast.makeText(getApplicationContext(), "Network error",
 						Toast.LENGTH_SHORT).show();
 

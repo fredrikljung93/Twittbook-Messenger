@@ -5,20 +5,10 @@ public class User {
 	private String username;
 	private String description;
 	
-	public User(int id, String username, String description){
-		this.setId(id);
+	public User(String username, String description){
 		this.setUsername(username);
 		this.setDescription(description);
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getUsername() {
 		return username;
 	}

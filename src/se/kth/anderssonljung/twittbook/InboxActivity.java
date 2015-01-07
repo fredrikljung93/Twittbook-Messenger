@@ -18,28 +18,30 @@ import android.widget.ListView;
 public class InboxActivity extends Activity {
 
 	ListView listview;
+	GlobalState global;
+	ArrayList<Message> messages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inbox);
+		global = (GlobalState) getApplication();
 		this.listview = (ListView) findViewById(R.id.listView1);
-		ArrayList<Message> messages = new ArrayList<Message>();
-		for (int i = 1; i <= 20; i++) {
-			messages.add(new Message(i, 1, i, "Message body with id " + i,
-					"Subject " + i));
-		}
-		ArrayAdapter<Message> adapter = new ArrayAdapter<Message>(this, R.layout.messagelistitem, messages);
+		messages = global.getDb().getInbox(global.getUser().getUsername());
+		ArrayAdapter<Message> adapter = new ArrayAdapter<Message>(this,
+				R.layout.messagelistitem, messages);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent intent = new Intent(InboxActivity.this, DisplayMessageActivity.class);
+				Intent intent = new Intent(InboxActivity.this,
+						DisplayMessageActivity.class);
+				intent.putExtra("messageid", messages.get(position).getId());
+				intent.putExtra("type", "inbox");
 				startActivity(intent);
-				
-				
+
 			}
 		});
 	}

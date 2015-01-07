@@ -1,12 +1,23 @@
 package se.kth.anderssonljung.twittbook;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import se.kth.anderssonljung.twittbook.entities.Message;
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,10 +41,6 @@ public class MenuActivity extends Activity {
 
 	}
 
-	public void onDraftClick(View view) {
-
-	}
-
 	public void onOutboxClick(View view) {
 
 	}
@@ -53,6 +60,11 @@ public class MenuActivity extends Activity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}
+		if (id == R.id.action_updateinbox) {
+			global.showToast("Update inbox");
+			UpdateInbox task = new UpdateInbox();
+			task.execute();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -84,6 +96,52 @@ public class MenuActivity extends Activity {
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
+
+	}
+
+	private class UpdateInbox extends AsyncTask<Void, Void, ResultCode> {
+		@Override
+		protected ResultCode doInBackground(Void... params) {
+			String jsonString = null;
+			BufferedReader in = null;
+			try {
+				URL url = new URL(
+						"http://a.fredrikljung.com:8080/Twittbook/webresources/rest/fullinbox?userId="
+								+ global.getUser().getUsername());
+				Log.d("Inbox url", url.toString());
+				in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+				jsonString = in.readLine();
+				in.close();
+			} catch (MalformedURLException ex) {
+				return ResultCode.ERROR;
+			} catch (FileNotFoundException ex) {
+				return ResultCode.FILENOTFOUND;
+			} catch (IOException ex) { // Network problems
+				return ResultCode.NETWORKERROR;
+			} finally {
+				if (in != null) {
+					try {
+						in.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+			Gson gson = new Gson();
+			Message[] messageArray = gson.fromJson(jsonString, Message[].class);
+			for (Message m : messageArray) {
+				global.getDb().addMessage(m);
+			}
+
+			return ResultCode.SUCCESS;
+		}
+
+		@Override
+		protected void onPostExecute(ResultCode result) {
+		}
 
 	}
 }

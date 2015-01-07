@@ -24,14 +24,6 @@
         android:layout_height="wrap_content"
         android:onClick="onInboxClick"
         android:text="Inbox" />
-
-    <Button
-        android:id="@+id/buttonDraft"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:onClick="onDraftClick"
-        android:text="Draft" />
-
     <Button
         android:id="@+id/buttonOutbox"
         android:layout_width="180dp"

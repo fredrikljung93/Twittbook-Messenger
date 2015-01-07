@@ -1,13 +1,17 @@
 package se.kth.anderssonljung.twittbook.entities;
 
 public class Message {
-	private int receiver;
-	private int sender;
+	private String receiver;
+	private String sender;
 	private int id;
 	private String message;
 	private String subject;
 
-	public Message(int messageid,int receiver, int sender, String message, String subject) {
+	public Message() {
+	}
+
+	public Message(int messageid, String receiver, String sender,
+			String message, String subject) {
 		this.setId(messageid);
 		this.setReceiver(receiver);
 		this.setSender(sender);
@@ -15,11 +19,11 @@ public class Message {
 		this.setSubject(subject);
 	}
 
-	public int getReceiver() {
+	public String getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(int receiver) {
+	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
 
@@ -31,11 +35,11 @@ public class Message {
 		this.message = message;
 	}
 
-	public int getSender() {
+	public String getSender() {
 		return sender;
 	}
 
-	public void setSender(int sender) {
+	public void setSender(String sender) {
 		this.sender = sender;
 	}
 
@@ -54,10 +58,10 @@ public class Message {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	
+
 	@Override
-	public String toString(){
-		return sender+": "+subject;
-		
+	public String toString() {
+		return sender + ": " + subject;
+
 	}
 }
