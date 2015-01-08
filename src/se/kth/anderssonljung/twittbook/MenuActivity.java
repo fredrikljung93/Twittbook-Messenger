@@ -43,7 +43,8 @@ public class MenuActivity extends Activity {
 	}
 
 	public void onOutboxClick(View view) {
-
+		Intent intent = new Intent(MenuActivity.this, OutboxActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
@@ -63,8 +64,8 @@ public class MenuActivity extends Activity {
 			return true;
 		}
 		if (id == R.id.action_updateinbox) {
-			global.showToast("Update inbox");
-			UpdateInbox task = new UpdateInbox();
+			global.showToast("Sync");
+			SyncInboxOutbox task = new SyncInboxOutbox();
 			task.execute();
 		}
 		return super.onOptionsItemSelected(item);
@@ -100,16 +101,19 @@ public class MenuActivity extends Activity {
 
 	}
 
-	private class UpdateInbox extends AsyncTask<Void, Void, ResultCode> {
+	private class SyncInboxOutbox extends AsyncTask<Void, Void, ResultCode> {
 		@Override
 		protected ResultCode doInBackground(Void... params) {
 			String jsonString = null;
 			BufferedReader in = null;
 			try {
+				int minid = global.getDb().getBiggestMessageId();
 				URL url = new URL(
-						"http://a.fredrikljung.com:8080/Twittbook/webresources/rest/fullinbox?userId="
-								+ global.getUser().getUsername());
-				Log.d("Inbox url", url.toString());
+						"http://a.fredrikljung.com:8080/Twittbook/webresources/rest/allmessages?userId="
+								+ global.getUser().getUsername()
+								+ "&minId="
+								+ minid);
+				Log.d("Sync url", url.toString());
 				in = new BufferedReader(new InputStreamReader(url.openStream()));
 
 				jsonString = in.readLine();

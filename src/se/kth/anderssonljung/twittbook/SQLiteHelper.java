@@ -168,4 +168,46 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		return messages;
 	}
 
+	public ArrayList<Message> getOutbox(String sender) {
+		Log.d("SQLITEHELPER", "getMessage()");
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String q = "SELECT * FROM " + TABLE_MESSAGE + " WHERE UPPER("
+				+ MESSAGE_SENDER + ") = UPPER('" + sender + "')";
+		Log.d("SQLiteHelper", q);
+		Cursor cursor = db.rawQuery(q, null);
+		ArrayList<Message> messages = new ArrayList<Message>();
+
+		if (cursor.moveToFirst()) {
+			do {
+				Message message = new Message();
+				message.setId(cursor.getInt(0));
+				message.setReceiver(cursor.getString(1));
+				message.setSender(cursor.getString(2));
+				message.setSubject(cursor.getString(3));
+				message.setMessage(cursor.getString(4));
+				messages.add(message);
+			} while (cursor.moveToNext());
+		}
+
+		return messages;
+	}
+
+	public int getBiggestMessageId() {
+		Log.d("SQLITEHELPER", "getBiggestMessageId()");
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String q = "SELECT MAX(" + MESSAGE_ID + ") FROM " + TABLE_MESSAGE;
+		Log.d("SQLiteHelper", q);
+		Cursor cursor = db.rawQuery(q, null);
+
+		if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		} else {
+			return -1;
+		}
+
+	}
+
 }
