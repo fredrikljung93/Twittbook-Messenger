@@ -86,7 +86,7 @@ public class MenuActivity extends Activity {
 			public void onClick(DialogInterface dialog, int id) {
 				SharedPreferences prefs = getSharedPreferences(
 						"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
-				prefs.edit().remove("userid").apply();
+				prefs.edit().remove("username").apply();
 				global.setUser(null);
 				finish();
 			}
