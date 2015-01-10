@@ -11,11 +11,9 @@ import com.google.gson.Gson;
 
 import se.kth.anderssonljung.twittbook.GlobalState;
 import se.kth.anderssonljung.twittbook.InboxActivity;
-import se.kth.anderssonljung.twittbook.MenuActivity;
-import se.kth.anderssonljung.twittbook.NewMessageActivity;
+import se.kth.anderssonljung.twittbook.R;
 import se.kth.anderssonljung.twittbook.ResultCode;
 import se.kth.anderssonljung.twittbook.entities.Message;
-import android.R;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -116,7 +114,7 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 						global.getApplicationContext()).setSmallIcon(0)
 						.setContentTitle("Twittbook").setContentText(msg);
 				mBuilder.setDefaults(Notification.DEFAULT_SOUND);
-				mBuilder.setSmallIcon(R.drawable.ic_media_ff);
+				mBuilder.setSmallIcon(R.drawable.ic_launcher);
 				mBuilder.setAutoCancel(true);
 				mBuilder.setContentIntent(pi);
 

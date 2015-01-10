@@ -148,7 +148,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String q = "SELECT * FROM " + TABLE_MESSAGE + " WHERE UPPER("
-				+ MESSAGE_RECEIVER + ") = UPPER('" + receiver + "')";
+				+ MESSAGE_RECEIVER + ") = UPPER('" + receiver + "') ORDER BY "
+				+ MESSAGE_ID + " DESC";
 		Log.d("SQLiteHelper", q);
 		Cursor cursor = db.rawQuery(q, null);
 		ArrayList<Message> messages = new ArrayList<Message>();
@@ -173,7 +174,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String q = "SELECT * FROM " + TABLE_MESSAGE + " WHERE UPPER("
-				+ MESSAGE_SENDER + ") = UPPER('" + sender + "')";
+				+ MESSAGE_SENDER + ") = UPPER('" + sender + "') ORDER BY "
+				+ MESSAGE_ID + " DESC";
 		Log.d("SQLiteHelper", q);
 		Cursor cursor = db.rawQuery(q, null);
 		ArrayList<Message> messages = new ArrayList<Message>();
