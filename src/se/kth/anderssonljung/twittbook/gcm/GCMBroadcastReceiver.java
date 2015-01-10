@@ -10,11 +10,15 @@ import java.net.URL;
 import com.google.gson.Gson;
 
 import se.kth.anderssonljung.twittbook.GlobalState;
+import se.kth.anderssonljung.twittbook.InboxActivity;
+import se.kth.anderssonljung.twittbook.MenuActivity;
+import se.kth.anderssonljung.twittbook.NewMessageActivity;
 import se.kth.anderssonljung.twittbook.ResultCode;
 import se.kth.anderssonljung.twittbook.entities.Message;
 import android.R;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -98,6 +102,9 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		@Override
 		protected void onPostExecute(ResultCode result) {
 			if (result == ResultCode.SUCCESS) {
+				Intent intent = new Intent(global, InboxActivity.class);
+				PendingIntent pi = PendingIntent.getActivity(global, 0, intent,
+						0);
 				Vibrator v = (Vibrator) global.getApplicationContext()
 						.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(new long[] { 100, 100, 100, 100 }, -1);
@@ -111,6 +118,8 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 				mBuilder.setDefaults(Notification.DEFAULT_SOUND);
 				mBuilder.setSmallIcon(R.drawable.ic_media_ff);
 				mBuilder.setAutoCancel(true);
+				mBuilder.setContentIntent(pi);
+
 				mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 			}
 		}
