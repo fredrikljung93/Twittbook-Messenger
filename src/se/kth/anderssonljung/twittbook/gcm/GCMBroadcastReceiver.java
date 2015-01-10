@@ -1,7 +1,5 @@
 package se.kth.anderssonljung.twittbook.gcm;
 
-//The whole class is based on example provided by Google
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,17 +7,14 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 
 import se.kth.anderssonljung.twittbook.GlobalState;
 import se.kth.anderssonljung.twittbook.ResultCode;
 import se.kth.anderssonljung.twittbook.entities.Message;
 import android.R;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -38,33 +33,7 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		Log.d("GCMBroadcastReceiver", "onReceive called");
 		String data = intent.getExtras().getString("data");
 		Log.d("GCMBroadcastReceiver", "data=" + data);
-		// Explicitly specify that GcmIntentService will handle the intent.
-		ComponentName comp = new ComponentName(context.getPackageName(),
-				GCMIntentService.class.getName());
-		Log.d("GCMBroadcastReceiver", "comp done");
-		// Start the service, keeping the device awake while it is launching.
-		startWakefulService(context, (intent.setComponent(comp)));
-		Log.d("GCMBroadcastReceiver", "Start wakefulservice done");
-		setResultCode(Activity.RESULT_OK);
-		Log.d("GCMBroadcastReceiver", "result ok");
 		downloadMessagesAndNotifyUser(data, context, intent);
-	}
-
-	private void sendNotification(String msg, Context context, Intent intent) {
-		GlobalState global = (GlobalState) context.getApplicationContext();
-		Vibrator v = (Vibrator) context
-				.getSystemService(Context.VIBRATOR_SERVICE);
-		v.vibrate(new long[] { 100, 100, 100, 100 }, -1);
-		Log.d("GCMService", "sendNotification");
-		mNotificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				context).setSmallIcon(0).setContentTitle("Twittbook")
-				.setContentText(msg);
-		mBuilder.setDefaults(Notification.DEFAULT_SOUND);
-		mBuilder.setSmallIcon(R.drawable.ic_media_ff);
-		mBuilder.setAutoCancel(true);
-		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 	}
 
 	private void downloadMessagesAndNotifyUser(String msg, Context context,

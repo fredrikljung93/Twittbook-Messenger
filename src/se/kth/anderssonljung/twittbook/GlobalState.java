@@ -1,7 +1,5 @@
 package se.kth.anderssonljung.twittbook;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import se.kth.anderssonljung.twittbook.entities.User;
 import android.app.Application;
 import android.content.Context;
