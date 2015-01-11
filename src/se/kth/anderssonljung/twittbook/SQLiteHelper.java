@@ -68,14 +68,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(USER_NAME, user.getUsername());
 		values.put(USER_DESCRIPTION, user.getDescription());
 
 		if (getUser(user.getUsername()) == null) {
+			values.put(USER_NAME, user.getUsername());
 			db.insert(TABLE_USER, null, values);
 		} else {
-			db.update(TABLE_USER, values, USER_NAME + "=" + user.getUsername(),
-					null);
+			db.update(TABLE_USER, values, "UPPER(" + USER_NAME + ")=UPPER('"
+					+ user.getUsername() + "')", null);
 		}
 
 		db.close();
