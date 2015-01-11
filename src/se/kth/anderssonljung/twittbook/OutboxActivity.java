@@ -1,3 +1,7 @@
+/**
+ * Activity that displays all messages sent by user
+ */
+
 package se.kth.anderssonljung.twittbook;
 
 import java.util.ArrayList;

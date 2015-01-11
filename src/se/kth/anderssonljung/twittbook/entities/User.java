@@ -1,3 +1,6 @@
+/**
+ * Instances of this class represent a Twittbook user
+ */
 package se.kth.anderssonljung.twittbook.entities;
 
 public class User {

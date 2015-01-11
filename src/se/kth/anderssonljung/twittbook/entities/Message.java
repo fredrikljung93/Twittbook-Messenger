@@ -1,3 +1,6 @@
+/**
+ * Instances of this class represent a message with a sender, receiver, id, subject and a message body.
+ */
 package se.kth.anderssonljung.twittbook.entities;
 
 public class Message {

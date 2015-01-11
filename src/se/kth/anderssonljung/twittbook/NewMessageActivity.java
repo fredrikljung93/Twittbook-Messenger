@@ -1,3 +1,6 @@
+/**
+ * Activity to compose a new message
+ */
 package se.kth.anderssonljung.twittbook;
 
 import java.io.IOException;
@@ -63,7 +66,10 @@ public class NewMessageActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+/**
+ * Sends message to backend
+ *
+ */
 	private class SendMessageTask extends AsyncTask<Void, Void, ResultCode> {
 		String to, from, subject, messagebody;
 

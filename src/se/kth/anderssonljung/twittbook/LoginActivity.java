@@ -1,3 +1,7 @@
+/**
+ * Activity that shows lets user log in to application.
+ * Also handles GCM registration (Google cloud messaging)
+ */
 package se.kth.anderssonljung.twittbook;
 
 import java.io.BufferedReader;
@@ -74,7 +78,9 @@ public class LoginActivity extends Activity {
 		usernameEdit = (EditText) findViewById(R.id.EditTextUsername);
 		passwordEdit = (EditText) findViewById(R.id.editTextPassword);
 	}
-
+/**
+ * Checks whether an user is already logged in. If so, redirect user to MenuActivity
+ */
 	public void gotoMenuActivityIfAlreadyLoggedIn() {
 		SharedPreferences prefs = getSharedPreferences(
 				"se.kth.anderssonljung.twittbook", Context.MODE_PRIVATE);
@@ -86,7 +92,10 @@ public class LoginActivity extends Activity {
 			startActivity(intent);
 		}
 	}
-
+/**
+ * Tries to log in user with filled in credentials
+ * @param view
+ */
 	public void onLoginClick(View view) {
 		if (usernameEdit.getText().toString().isEmpty()
 				|| passwordEdit.getText().toString().isEmpty()) {
@@ -115,7 +124,10 @@ public class LoginActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+/**
+ * Log in against the backend using REST interface
+ *
+ */
 	private class LoginTask extends AsyncTask<Void, Void, ResultCode> {
 		String usernameString;
 		String passwordString;
@@ -199,11 +211,14 @@ public class LoginActivity extends Activity {
 
 	}
 
-	// Method provided by Google
 	/**
+	 * Method provided by Google
+	 * https://developer.android.com/google/gcm/client.html
+	 * 
 	 * Check the device to make sure it has the Google Play Services APK. If it
 	 * doesn't, display a dialog that allows users to download the APK from the
 	 * Google Play Store or enable it in the device's system settings.
+	 * 
 	 */
 	private boolean checkPlayServices() {
 		int resultCode = GooglePlayServicesUtil
@@ -221,11 +236,14 @@ public class LoginActivity extends Activity {
 		return true;
 	}
 
-	// Method provided by Google
 	/**
+	 * Method provided by Google
+	 * https://developer.android.com/google/gcm/client.html
+	 * 
 	 * Gets the current registration ID for application on GCM service.
 	 * <p>
 	 * If result is empty, the app needs to register.
+	 *
 	 * 
 	 * @return registration ID, or empty string if there is no existing
 	 *         registration ID.
@@ -250,16 +268,18 @@ public class LoginActivity extends Activity {
 		return registrationId;
 	}
 
-	// Method provided by Google
 	/**
+	 * Method provided by Google
+	 * https://developer.android.com/google/gcm/client.html
 	 * @return Application's {@code SharedPreferences}.
 	 */
 	private SharedPreferences getGCMPreferences(Context context) {
 		return getSharedPreferences("TwittbookGCM", Context.MODE_PRIVATE);
 	}
 
-	// Method provided by Google
-	/**
+	/** Method provided by Google
+	 * https://developer.android.com/google/gcm/client.html
+	 * 
 	 * @return Application's version code from the {@code PackageManager}.
 	 */
 	private static int getAppVersion(Context context) {
@@ -273,8 +293,10 @@ public class LoginActivity extends Activity {
 		}
 	}
 
-	// Method provided by Google
 	/**
+	 * Method provided by Google
+	 * https://developer.android.com/google/gcm/client.html
+	 * 
 	 * Registers the application with GCM servers asynchronously.
 	 * <p>
 	 * Stores the registration ID and the app versionCode in the application's
@@ -322,10 +344,7 @@ public class LoginActivity extends Activity {
 	}
 
 	/**
-	 * Sends the registration ID to your server over HTTP, so it can use
-	 * GCM/HTTP or CCS to send messages to your app. Not needed for this demo
-	 * since the device sends upstream messages to a server that echoes back the
-	 * message using the 'from' address in the message.
+	 * Sends GCM registration id to backend
 	 */
 	private void sendRegistrationIdToBackend() {
 		new AsyncTask<Void, Void, Void>() {
@@ -366,8 +385,10 @@ public class LoginActivity extends Activity {
 		}.execute(null, null, null);
 	}
 
-	// Method provided by Google
 	/**
+	 * Method provided by Google
+	 * https://developer.android.com/google/gcm/client.html
+	 * 
 	 * Stores the registration ID and the app versionCode in the application's
 	 * {@code SharedPreferences}.
 	 * 

@@ -1,3 +1,6 @@
+/**
+ * Activity with a menu for an already signed in user
+ */
 package se.kth.anderssonljung.twittbook;
 
 import java.io.BufferedReader;

@@ -1,3 +1,7 @@
+/**
+ * Instances of this class provides application with necessary CRUD operations to the SQLite Database
+ */
+
 package se.kth.anderssonljung.twittbook;
 
 import java.util.ArrayList;
@@ -62,7 +66,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGE + ";");
 		this.onCreate(db);
 	}
-
+/**
+ * Add or update user to the database
+ * @param user
+ */
 	public void addUser(User user) {
 		Log.d("SQLITEHELPER", "addUser()");
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -80,7 +87,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 		db.close();
 	}
-
+/**
+ * Add message to database
+ * @param m
+ */
 	public void addMessage(Message m) {
 		Log.d("SQLITEHELPER", "addMessage()");
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -96,7 +106,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 		db.close();
 	}
-
+/**
+ * Returns user from database
+ * @param username
+ * @return
+ */
 	public User getUser(String username) {
 		Log.d("SQLITEHELPER", "getUser()");
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -117,7 +131,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		User user = new User(cursor.getString(0), cursor.getString(1));
 		return user;
 	}
-
+/**
+ * Returns message from database
+ * @param id
+ * @return
+ */
 	public Message getMessage(int id) {
 		Log.d("SQLITEHELPER", "getMessage() with id " + id);
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -142,7 +160,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		}
 
 	}
-
+/**
+ * Returns all messages received by a user
+ * @param receiver
+ * @return
+ */
 	public ArrayList<Message> getInbox(String receiver) {
 		Log.d("SQLITEHELPER", "getMessage()");
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -168,7 +190,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 		return messages;
 	}
-
+/**
+ * Returns all messages sent by user
+ * @param sender
+ * @return
+ */
 	public ArrayList<Message> getOutbox(String sender) {
 		Log.d("SQLITEHELPER", "getMessage()");
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -194,7 +220,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 		return messages;
 	}
-
+/**
+ * Returns id of the message with the highest id.
+ * If no messages are stored in database, -1 is returned
+ * @return
+ */
 	public int getBiggestMessageId() {
 		Log.d("SQLITEHELPER", "getBiggestMessageId()");
 		SQLiteDatabase db = this.getReadableDatabase();

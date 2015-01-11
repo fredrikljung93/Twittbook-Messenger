@@ -1,3 +1,6 @@
+/**
+ * Activity that shows a particular message
+ */
 package se.kth.anderssonljung.twittbook;
 
 import se.kth.anderssonljung.twittbook.entities.Message;

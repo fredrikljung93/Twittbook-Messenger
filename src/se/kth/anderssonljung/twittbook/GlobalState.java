@@ -1,3 +1,6 @@
+/**
+ * Application class that provides database access and stores user reference
+ */
 package se.kth.anderssonljung.twittbook;
 
 import se.kth.anderssonljung.twittbook.entities.User;

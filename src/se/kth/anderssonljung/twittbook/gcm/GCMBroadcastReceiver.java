@@ -1,3 +1,8 @@
+/**
+ * Broadcast Receiver that receives intents created by GCM.
+ * Displays notification when GCM message is received
+ */
+
 package se.kth.anderssonljung.twittbook.gcm;
 
 import java.io.BufferedReader;
@@ -38,6 +43,12 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		downloadMessagesAndNotifyUser(data, context, intent);
 	}
 
+	/**
+	 * Downloads new messages and notifies user
+	 * @param msg
+	 * @param context
+	 * @param intent
+	 */
 	private void downloadMessagesAndNotifyUser(String msg, Context context,
 			Intent intent) {
 		SyncInboxOutbox task = new SyncInboxOutbox(
@@ -45,7 +56,10 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver {
 		task.execute();
 
 	}
-
+/**
+ * Downoads new messages and notifies user
+ *
+ */
 	private class SyncInboxOutbox extends AsyncTask<Void, Void, ResultCode> {
 		GlobalState global;
 		String msg;
